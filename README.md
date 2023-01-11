@@ -1,0 +1,1 @@
+A web app calculator created to practice front-end UI work. Created with vanilla javascript.
