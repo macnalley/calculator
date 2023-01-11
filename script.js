@@ -1,3 +1,26 @@
+let displayText = "";
+
+// DOM elements
+const NumBtns = document.querySelectorAll('.number');
+const displayElement = document.querySelector('#display');
+
+// Events
+NumBtns.forEach(btn => btn.addEventListener('click', NumClick));
+
+
+function NumClick(e) {
+    if (displayText.length <= 15) {
+        displayText += `${e.target.textContent}`;
+    }
+    updateDisplay();
+}
+
+
+// Display functions
+function updateDisplay() {
+    displayElement.textContent = displayText;
+}
+
 // Calculator functions
 function add(x, y) {
     return x + y;
