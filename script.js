@@ -39,23 +39,32 @@ function numClick(e) {
 }
 
 function operClick(e) {
+    if (isNaN(displayText)) {
+        return;
+    }
+    
     let operator = e.target.textContent;
     
     if (memory.length > 0) {
         let memoryOperator = memory.slice(-1);
         let x = parseFloat(memory.slice(0, memory.length - 1));
         let y = parseFloat(displayText);
-        let result = operate(memoryOperator, x, y)
+        let result = operate(memoryOperator, x, y);
 
-        displayText = roundToCharacters(result, characterLimit) + operator;
-    }
-    else if (!hasOperatorApplied(displayText)) {
+        if (isNaN(result)) {
+            displayText = 'Can\'t ÷ 0';
+            memory = '';
+            updateDisplay(true);
+        } else {
+            displayText = roundToCharacters(result, characterLimit) + operator;
+        }
+    } else if (!hasOperatorApplied(displayText)) {
         displayText += `${operator}`;
+        updateDisplay();
     } else {
         displayText = displayText.slice(0, displayText.length - 1) + operator;
-    }
-    updateDisplay();
-
+        updateDisplay();
+    } 
 }
 
 function equalsClick() {
@@ -64,9 +73,15 @@ function equalsClick() {
         let x = parseFloat(memory.slice(0, memory.length - 1));
         let y = parseFloat(displayText);
         let result = operate(operator, x, y)
-        displayText = `${roundToCharacters(result, characterLimit)}`;
-        memory = '';
-        updateDisplay(true);
+        if (isNaN(result)) {
+            displayText = 'Can\'t ÷ 0';
+            memory = '';
+            updateDisplay(true);
+        } else { 
+            displayText = `${roundToCharacters(result, characterLimit)}`;
+            memory = '';
+            updateDisplay(true);
+        }
     }
 }
 
