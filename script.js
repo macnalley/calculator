@@ -8,12 +8,16 @@ const numBtns = document.querySelectorAll('.number');
 const operBtns = document.querySelectorAll('.operator');
 const equalsBtn = document.querySelector('#equals');
 const clearBtn = document.querySelector('#clear');
+const backBtn = document.querySelector('#back');
+const negativeBtn = document.querySelector('#negative');
 
 // Events
 numBtns.forEach(btn => btn.addEventListener('click', numClick));
 operBtns.forEach(btn => btn.addEventListener('click', operClick));
 equalsBtn.addEventListener('click', equalsClick);
 clearBtn.addEventListener('click', clear);
+backBtn.addEventListener('click', back);
+negativeBtn.addEventListener('click', makeNegative);
 
 
 function numClick(e) {
@@ -66,6 +70,22 @@ function equalsClick(e) {
 function clear(e) {
     displayText = "";
     memory = "";
+    updateDisplay();
+    isAnswerDisplayed = false;
+}
+
+function back(e) {
+    displayText = displayText.slice(0, displayText.length - 1);
+    updateDisplay();
+    isAnswerDisplayed = false;
+}
+
+function makeNegative(e) {
+    if (displayText.slice(0, 1) === '-') {
+        displayText = displayText.slice(1, displayText.length);
+    } else {
+        displayText = '-' + displayText;
+    }
     updateDisplay();
     isAnswerDisplayed = false;
 }
