@@ -15,7 +15,7 @@ h1 {
 }
 
 #calculator {
-    height: 500px;
+    height: 600px;
     width: 400px;
     margin-top: 50px;
     border: 1px solid black;
@@ -32,8 +32,8 @@ h1 {
 }
 
 #display {
-    width: 100%;
     height: 25%;
+    padding: 0px 10px;
     
     display: flex;
     justify-content: right;
@@ -46,7 +46,7 @@ h1 {
 
     text-align: right;
 
-    font-size: 3rem;
+    font-size: 4rem;
 }
 
 #buttons {
