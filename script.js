@@ -1,6 +1,7 @@
 let displayText = "";
 let memory = "";
 let isAnswerDisplayed = false;
+let characterLimit = 10;
 
 // DOM elements
 const displayElement = document.querySelector('#display');
@@ -25,7 +26,7 @@ function numClick(e) {
         displayText = '';
         displayText += `${e.target.textContent}`;
     }
-    else if (displayText.length <= 11 & !hasOperatorApplied(displayText)) {
+    else if (displayText.length <= characterLimit & !hasOperatorApplied(displayText)) {
         displayText += `${e.target.textContent}`;
     } else if (hasOperatorApplied(displayText)) {
         memory = displayText;
@@ -33,7 +34,6 @@ function numClick(e) {
         displayText += `${e.target.textContent}`;
     }
     updateDisplay();
-    isAnswerDisplayed = false;
 }
 
 function operClick(e) {
@@ -41,9 +41,11 @@ function operClick(e) {
     
     if (memory.length > 0) {
         let memoryOperator = memory.slice(-1);
-        let x = parseInt(memory.slice(0, memory.length - 1));
-        let y = parseInt(displayText);
-        displayText = operate(memoryOperator, x, y) + operator;
+        let x = parseFloat(memory.slice(0, memory.length - 1));
+        let y = parsefloat(displayText);
+        let result = operate(memoryOperator, x, y)
+
+        displayText = roundToCharacters(result, characterLimit) + operator;
     }
     else if (!hasOperatorApplied(displayText)) {
         displayText += `${operator}`;
@@ -51,19 +53,18 @@ function operClick(e) {
         displayText = displayText.slice(0, displayText.length - 1) + operator;
     }
     updateDisplay();
-    isAnswerDisplayed = false;
 
 }
 
 function equalsClick(e) {
     if (memory.length > 0 && displayText.length > 0) {
         let operator = memory.slice(-1);
-        let x = parseInt(memory.slice(0, memory.length - 1));
-        let y = parseInt(displayText);
-        displayText = `${operate(operator, x, y)}`;
+        let x = parseFloat(memory.slice(0, memory.length - 1));
+        let y = parseFloat(displayText);
+        let result = operate(operator, x, y)
+        displayText = `${roundToCharacters(result, characterLimit)}`;
         memory = '';
-        updateDisplay();
-        isAnswerDisplayed = true;
+        updateDisplay(true);
     }
 }
 
@@ -71,13 +72,11 @@ function clear(e) {
     displayText = "";
     memory = "";
     updateDisplay();
-    isAnswerDisplayed = false;
 }
 
 function back(e) {
     displayText = displayText.slice(0, displayText.length - 1);
     updateDisplay();
-    isAnswerDisplayed = false;
 }
 
 function makeNegative(e) {
@@ -87,7 +86,6 @@ function makeNegative(e) {
         displayText = '-' + displayText;
     }
     updateDisplay();
-    isAnswerDisplayed = false;
 }
 
 function hasOperatorApplied(text) {
@@ -111,8 +109,9 @@ function hasOperatorApplied(text) {
 }
 
 // Display functions
-function updateDisplay() {
+function updateDisplay(isAnswer = false) {
     displayElement.textContent = displayText;
+    isAnswerDisplayed = isAnswer;
 }
 
 // Calculator functions
@@ -150,4 +149,13 @@ function operate(operator, x, y) {
             return 'Error';
             break;
     }
+}
+
+function roundToCharacters(number, totalChar) {
+    numberString = number.toString();
+    decimalIndex = numberString.indexOf('.');
+    digitsToRoundTo = totalChar - 1 - decimalIndex;
+    roundingPower = Math.pow(10, digitsToRoundTo);
+
+    return Math.round(number * roundingPower) / roundingPower;
 }
